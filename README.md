@@ -1,65 +1,31 @@
 ![alt text](https://assets.juce.com/juce/JUCE_banner_github.png "JUCE")
 
-JUCE is an open-source cross-platform C++ application framework for creating
-desktop and mobile applications, including VST, VST3, AU, AUv3, AAX and LV2
-audio plug-ins and plug-in hosts. JUCE can be easily integrated with existing
-projects via CMake, or can be used as a project generation tool via the
-[Projucer](#the-projucer), which supports exporting projects for Xcode (macOS
-and iOS), Visual Studio, Android Studio, and Linux Makefiles as well as
-containing a source code editor.
+JUCE - это опенсорсный кроссплатформный фреймворк для создания приложений на C++ для десктопов и мобильников, включающий аудиоплагины и хосты плагинов VST, VST3, AU, AUv3, AAX и LV2. JUCE может легко интегрироваться с существующими проетами через CMake, либо может использоваться как инстрмент генерации проектов с помощью
+[Projucer](#projucer), который поддерживает экспортирование проектов для Xcode (macOS и iOS), Visual Studio, Android Studio и Linux Makefiles, также включая в себя редактор кода.
 
-## Getting Started
+## Приступая
 
-The JUCE repository contains a
-[master](https://github.com/juce-framework/JUCE/tree/master) and
-[develop](https://github.com/juce-framework/JUCE/tree/develop) branch. The
-develop branch contains the latest bug fixes and features and is periodically
-merged into the master branch in stable [tagged
-releases](https://github.com/juce-framework/JUCE/releases) (the latest release
-containing pre-built binaries can be also downloaded from the [JUCE
-website](https://juce.com/get-juce)).
+В репозитории JUCE содержатся ветви
+[master](https://github.com/juce-framework/JUCE/tree/master) и
+[develop](https://github.com/juce-framework/JUCE/tree/develop). Ветвь develop содержит последние исправления багов и фич, и время от времени маржируется в ветвь master в стабильных [выпусках с тэгами](https://github.com/juce-framework/JUCE/releases) (последний выпуск с предварительно построенными бмнарниками также можно загрузить с [веь сайта JUCE](https://juce.com/get-juce)).
 
-JUCE projects can be managed with either the Projucer (JUCE's own
-project-configuration tool) or with CMake.
+Проекты JUCE можно маржировать либо посредством Projucer (собственный инструмент конфигурирования JUCE), либо посредством CMake.
 
-### The Projucer
+### Projucer
 
-The repository doesn't contain a pre-built Projucer so you will need to build it
-for your platform - Xcode, Visual Studio and Linux Makefile projects are located
-in [extras/Projucer/Builds](/extras/Projucer/Builds) (the minimum system
-requirements are listed in the [minimum system
-requirements](#minimum-system-requirements) section below). The Projucer can
-then be used to create new JUCE projects, view tutorials and run examples. It is
-also possible to include the JUCE modules source code in an existing project
-directly, or build them into a static or dynamic library which can be linked
-into a project.
+Репозитория не содержит уже построенный Projucer, его нужно будет построить самому для своей платформы - проекты Xcode, Visual Studio и Linux Makefile располагаются в [extras/Projucer/Builds](/extras/Projucer/Builds) (минимальные системные требования перечисленны в разделе [минимальные системные требования](#минимальные-системные-требования), расположенном ниже). Замеи можно будет использовать Projucer для создания новых проектов JUCE, просмотра уроков и выполнения примеров. Можно также напрямую включать исходный код модулей JUCE в существующий проект, либо строить их в форме статических или динамических библиотек, которые можно линковать к проекту.
 
-For further help getting started, please refer to the JUCE
-[documentation](https://juce.com/learn/documentation) and
-[tutorials](https://juce.com/learn/tutorials).
+Дополнительная информация имеется на сайтах
+[документации](https://juce.com/learn/documentation) и
+[уроков](https://juce.com/learn/tutorials).
 
-### CMake
+## Фреймворк DRX
 
-Version 3.22 or higher is required. To use CMake, you will need to install it,
-either from your system package manager or from the [official download
-page](https://cmake.org/download/). For comprehensive documentation on JUCE's
-CMake API, see the [JUCE CMake documentation](/docs/CMake%20API.md). For
-examples which may be useful as starting points for new CMake projects, see the
-[CMake examples directory](/examples/CMake).
+Фреймворк DRX - это переработанная версия фреймворка JUCE, которая является ассимиляцией его в систему построений ИСР РНЦП "Динрус", с заменой типизации и с руссификацией справочной документации. Возможный иные существенные различия.
 
-#### Building Examples
+## Минимальные Системные Требования
 
-To use CMake to build the examples and extras bundled with JUCE, simply clone
-JUCE and then run the following commands, replacing "DemoRunner" with the name
-of the target you wish to build.
-
-    cd /path/to/JUCE
-    cmake . -B cmake-build -DJUCE_BUILD_EXAMPLES=ON -DJUCE_BUILD_EXTRAS=ON
-    cmake --build cmake-build --target DemoRunner
-
-## Minimum System Requirements
-
-#### Building JUCE Projects
+#### Построение Проектов DRX
 
 - __C++ Standard__: 17
 - __macOS/iOS__: Xcode 12.4 (Intel macOS 10.15.4, Apple Silicon macOS 11.0)
@@ -68,7 +34,7 @@ of the target you wish to build.
 [here](/docs/Linux%20Dependencies.md)).
 - __Android__: Android Studio (NDK 26) on Windows, macOS or Linux
 
-#### Deployment Targets
+#### Цели Разворачивания
 
 - __macOS__: macOS 10.11 (x86_64, Arm64)
 - __Windows__: Windows 10 (x86_64, x86, Arm64, Arm64EC)
