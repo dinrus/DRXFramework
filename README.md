@@ -5,8 +5,6 @@
 JUCE - это опенсорсный кроссплатформный фреймворк для создания приложений на C++ для десктопов и мобильников, включающий аудиоплагины и хосты плагинов VST, VST3, AU, AUv3, AAX и LV2. JUCE может легко интегрироваться с существующими проетами через CMake, либо может использоваться как инстрмент генерации проектов с помощью
 [Projucer](#projucer), который поддерживает экспортирование проектов для Xcode (macOS и iOS), Visual Studio, Android Studio и Linux Makefiles, также включая в себя редактор кода.
 
-## Приступая
-
 В репозитории JUCE содержатся ветви
 [master](https://github.com/juce-framework/JUCE/tree/master) и
 [develop](https://github.com/juce-framework/JUCE/tree/develop). Ветвь develop содержит последние исправления багов и фич, и время от времени маржируется в ветвь master в стабильных [выпусках с тэгами](https://github.com/juce-framework/JUCE/releases) (последний выпуск с предварительно построенными бмнарниками также можно загрузить с [веб-сайта JUCE](https://juce.com/get-juce)).
@@ -25,6 +23,9 @@ JUCE - это опенсорсный кроссплатформный фрейм
 
 Фреймворк DRX - это переработанная версия фреймворка JUCE, которая является ассимиляцией его в систему построений ИСР РНЦП "Динрус", с заменой типизации и с руссификацией справочной документации. Возможны иные существенные различия.
 
+Projucer в DRX представлен для ОС Linux Solus 4.4 Harmony.
+Над ним ведётся работа по слиянию его с ИСР РНЦП "Динрус".
+
 ## Минимальные Системные Требования
 
 #### Построение Проектов DRX
@@ -32,9 +33,8 @@ JUCE - это опенсорсный кроссплатформный фрейм
 - __C++ Standard__: 17
 - __macOS/iOS__: Xcode 12.4 (Intel macOS 10.15.4, Apple Silicon macOS 11.0)
 - __Windows__: Visual Studio 2019 (Windows 10)
-- __Linux__: g++ 7.0 or Clang 6.0 (for a full list of dependencies, see
-[here](/docs/Linux%20Dependencies.md)).
-- __Android__: Android Studio (NDK 26) on Windows, macOS or Linux
+- __Linux__: g++ 7.0 или Clang 6.0 (полный список зависимостей [здесь](/docs/Linux%20Dependencies.md)).
+- __Android__: Android Studio (NDK 26) на Windows, macOS или Linux
 
 #### Цели Разворачивания
 
