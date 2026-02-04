@@ -1,0 +1,5 @@
+#pragma once
+
+#ifndef DrxPlugin_LV2URI
+ #define DrxPlugin_LV2URI "${JUCE_LV2URI}"
+#endif

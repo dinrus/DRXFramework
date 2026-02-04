@@ -1,0 +1,11 @@
+file
+	drx_product_unlocking.h,
+	drx_product_unlocking.cpp,
+	drx_product_unlocking.mm,
+	in_app_purchases/drx_InAppPurchases.h,
+	marketplace/drx_KeyFileGeneration.h,
+	marketplace/drx_OnlineUnlockForm.h,
+	marketplace/drx_OnlineUnlockStatus.h,
+	marketplace/drx_TracktionMarketplaceStatus.h,
+	end readonly separator;
+

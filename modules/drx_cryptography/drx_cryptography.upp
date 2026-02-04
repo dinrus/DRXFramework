@@ -1,0 +1,12 @@
+file
+	drx_cryptography.h,
+	drx_cryptography.mm,
+	drx_cryptography.cpp,
+	encryption/drx_BlowFish.h,
+	encryption/drx_Primes.h,
+	encryption/drx_RSAKey.h,
+	hashing/drx_MD5.h,
+	hashing/drx_SHA256.h,
+	hashing/drx_Whirlpool.h,
+	end readonly separator;
+

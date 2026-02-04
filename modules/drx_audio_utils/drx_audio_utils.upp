@@ -1,0 +1,21 @@
+file
+	drx_audio_utils.h,
+	audio_cd/drx_AudioCDBurner.h,
+	audio_cd/drx_AudioCDReader.h,
+	gui/drx_AudioAppComponent.h,
+	gui/drx_AudioDeviceSelectorComponent.h,
+	gui/drx_AudioThumbnail.h,
+	gui/drx_AudioThumbnailBase.h,
+	gui/drx_AudioThumbnailCache.h,
+	gui/drx_AudioVisualiserComponent.h,
+	gui/drx_BluetoothMidiDevicePairingDialogue.h,
+	gui/drx_KeyboardComponentBase.h,
+	gui/drx_MidiKeyboardComponent.h,
+	gui/drx_MPEKeyboardComponent.h,
+	players/drx_AudioProcessorPlayer.h,
+	players/drx_SoundPlayer.h,
+	code readonly separator,
+	drx_audio_utils.cpp,
+	drx_audio_utils.mm,
+	end readonly separator;
+

@@ -1,0 +1,379 @@
+/*
+  ==============================================================================
+
+   This file is part of the DRX framework examples.
+   Copyright (c) DinrusPro
+
+   The code included in this file is provided under the terms of the ISC license
+   http://www.isc.org/downloads/software-support-policy/isc-license. Permission
+   to use, copy, modify, and/or distribute this software for any purpose with or
+   without fee is hereby granted provided that the above copyright notice and
+   this permission notice appear in all copies.
+
+   THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+   REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+   AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+   INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+   LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+   OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+   PERFORMANCE OF THIS SOFTWARE.
+
+  ==============================================================================
+*/
+
+/*******************************************************************************
+ The block below describes the properties of this PIP. A PIP is a short snippet
+ of code that can be read by the Projucer and used to generate a DRX project.
+
+ BEGIN_DRX_PIP_METADATA
+
+ name:             FontsDemo
+ version:          1.0.0
+ vendor:           DRX
+ website:          http://drx.com
+ description:      Displays different font styles and types.
+
+ dependencies:     drx_core, drx_data_structures, drx_events, drx_graphics,
+                   drx_gui_basics
+ exporters:        xcode_mac, vs2022, linux_make, androidstudio, xcode_iphone
+
+ moduleFlags:      DRX_STRICT_REFCOUNTEDPOINTER=1
+
+ type:             Component
+ mainClass:        FontsDemo
+
+ useLocalCopy:     1
+
+ END_DRX_PIP_METADATA
+
+*******************************************************************************/
+
+#pragma once
+
+#include "../Assets/DemoUtilities.h"
+
+//==============================================================================
+class FontsDemo final : public Component,
+                        private ListBoxModel
+{
+public:
+    FontsDemo()
+    {
+        setOpaque (true);
+
+        addAndMakeVisible (listBox);
+        addAndMakeVisible (demoTextBox);
+        addAndMakeVisible (heightSlider);
+        addAndMakeVisible (heightLabel);
+        addAndMakeVisible (kerningLabel);
+        addAndMakeVisible (kerningSlider);
+        addAndMakeVisible (ascentLabel);
+        addAndMakeVisible (ascentSlider);
+        addAndMakeVisible (descentLabel);
+        addAndMakeVisible (descentSlider);
+        addAndMakeVisible (scaleLabel);
+        addAndMakeVisible (horizontalJustificationLabel);
+        addAndMakeVisible (verticalJustificationLabel);
+        addAndMakeVisible (scaleSlider);
+        addAndMakeVisible (boldToggle);
+        addAndMakeVisible (italicToggle);
+        addAndMakeVisible (underlineToggle);
+        addAndMakeVisible (styleBox);
+        addAndMakeVisible (horizontalJustificationBox);
+        addAndMakeVisible (verticalJustificationBox);
+        addAndMakeVisible (resetButton);
+
+        kerningLabel                .attachToComponent (&kerningSlider,              true);
+        heightLabel                 .attachToComponent (&heightSlider,               true);
+        scaleLabel                  .attachToComponent (&scaleSlider,                true);
+        styleLabel                  .attachToComponent (&styleBox,                   true);
+        ascentLabel                 .attachToComponent (&ascentSlider,               true);
+        descentLabel                .attachToComponent (&descentSlider,              true);
+        horizontalJustificationLabel.attachToComponent (&horizontalJustificationBox, true);
+        verticalJustificationLabel  .attachToComponent (&verticalJustificationBox,   true);
+
+        for (auto* slider : { &heightSlider, &kerningSlider, &scaleSlider, &ascentSlider, &descentSlider })
+            slider->onValueChange = [this] { refreshPreviewBoxFont(); };
+
+        boldToggle     .onClick  = [this] { refreshPreviewBoxFont(); };
+        italicToggle   .onClick  = [this] { refreshPreviewBoxFont(); };
+        underlineToggle.onClick  = [this] { refreshPreviewBoxFont(); };
+        styleBox       .onChange = [this] { refreshPreviewBoxFont(); };
+
+        Font::findFonts (fonts);   // Generate the list of fonts
+
+        listBox.setTitle ("Fonts");
+        listBox.setRowHeight (20);
+        listBox.setModel (this);   // Tell the listbox where to get its data model
+        listBox.setColor (ListBox::textColorId, Colors::black);
+        listBox.setColor (ListBox::backgroundColorId, Colors::white);
+
+        heightSlider .setRange (3.0, 150.0, 0.01);
+        scaleSlider  .setRange (0.2, 3.0, 0.01);
+        kerningSlider.setRange (-2.0, 2.0, 0.01);
+        ascentSlider .setRange (0.0, 2.0, 0.01);
+        descentSlider.setRange (0.0, 2.0, 0.01);
+
+        ascentSlider .setValue (1, dontSendNotification);
+        descentSlider.setValue (1, dontSendNotification);
+
+        // set up the layout and resizer bars..
+        verticalLayout.setItemLayout (0, -0.2, -0.8, -0.35); // width of the font list must be
+                                                             // between 20% and 80%, preferably 50%
+        verticalLayout.setItemLayout (1, 8, 8, 8);           // the vertical divider drag-bar thing is always 8 pixels wide
+        verticalLayout.setItemLayout (2, 150, -1.0, -0.65);  // the components on the right must be
+                                                             // at least 150 pixels wide, preferably 50% of the total width
+
+        verticalDividerBar.reset (new StretchableLayoutResizerBar (&verticalLayout, 1, true));
+        addAndMakeVisible (verticalDividerBar.get());
+
+        // ..and pick a random font to select initially
+        listBox.selectRow (Random::getSystemRandom().nextInt (fonts.size()));
+
+        demoTextBox.setMultiLine (true);
+        demoTextBox.setReturnKeyStartsNewLine (true);
+        demoTextBox.setText ("Aa Bb Cc Dd Ee Ff Gg Hh Ii\n"
+                             "Jj Kk Ll Mm Nn Oo Pp Qq Rr\n"
+                             "Ss Tt Uu Vv Ww Xx Yy Zz\n"
+                             "0123456789\n\n"
+                             "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt "
+                             "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco "
+                             "laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in "
+                             "voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat "
+                             "non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+
+        demoTextBox.setCaretPosition (0);
+        demoTextBox.setColor (TextEditor::textColorId, Colors::black);
+        demoTextBox.setColor (TextEditor::backgroundColorId, Colors::white);
+
+        demoTextBox.setWhitespaceUnderlined (false);
+
+        resetButton.onClick = [this] { resetToDefaultParameters(); };
+
+        setupJustificationOptions();
+        resetToDefaultParameters();
+
+        setSize (750, 750);
+    }
+
+    //==============================================================================
+    z0 paint (Graphics& g) override
+    {
+        g.fillAll (getUIColorIfAvailable (LookAndFeel_V4::ColorScheme::UIColor::windowBackground));
+    }
+
+    z0 resized() override
+    {
+        auto r = getLocalBounds().reduced (5);
+
+        // lay out the list box and vertical divider..
+        Component* vcomps[] = { &listBox, verticalDividerBar.get(), nullptr };
+
+        verticalLayout.layOutComponents (vcomps, 3,
+                                         r.getX(), r.getY(), r.getWidth(), r.getHeight(),
+                                         false,     // lay out side-by-side
+                                         true);     // resize the components' heights as well as widths
+
+
+        r.removeFromLeft (verticalDividerBar->getRight());
+
+        resetButton.setBounds (r.removeFromBottom (30).reduced (jmax (20, r.getWidth() / 5), 0));
+        r.removeFromBottom (8);
+
+        i32k labelWidth = 60;
+
+        auto styleArea = r.removeFromBottom (26);
+        styleArea.removeFromLeft (labelWidth);
+        styleBox.setBounds (styleArea);
+        r.removeFromBottom (8);
+
+        auto row = r.removeFromBottom (30);
+        row.removeFromLeft (labelWidth);
+        auto toggleWidth = row.getWidth() / 3;
+        boldToggle     .setBounds (row.removeFromLeft (toggleWidth));
+        italicToggle   .setBounds (row.removeFromLeft (toggleWidth));
+        underlineToggle.setBounds (row);
+
+        r.removeFromBottom (8);
+        horizontalJustificationBox.setBounds (r.removeFromBottom (30).withTrimmedLeft (labelWidth * 3));
+        r.removeFromBottom (8);
+        verticalJustificationBox.setBounds (r.removeFromBottom (30).withTrimmedLeft (labelWidth * 3));
+        r.removeFromBottom (8);
+        descentSlider.setBounds (r.removeFromBottom (30).withTrimmedLeft (labelWidth));
+        r.removeFromBottom (8);
+        ascentSlider.setBounds (r.removeFromBottom (30).withTrimmedLeft (labelWidth));
+        r.removeFromBottom (8);
+        scaleSlider.setBounds (r.removeFromBottom (30).withTrimmedLeft (labelWidth));
+        r.removeFromBottom (8);
+        kerningSlider.setBounds (r.removeFromBottom (30).withTrimmedLeft (labelWidth));
+        r.removeFromBottom (8);
+        heightSlider.setBounds (r.removeFromBottom (30).withTrimmedLeft (labelWidth));
+        r.removeFromBottom (8);
+        demoTextBox.setBounds (r);
+    }
+
+    // The following methods implement the ListBoxModel virtual methods:
+    i32 getNumRows() override
+    {
+        return fonts.size();
+    }
+
+    z0 paintListBoxItem (i32 rowNumber, Graphics& g,
+                           i32 width, i32 height, b8 rowIsSelected) override
+    {
+        if (rowIsSelected)
+            g.fillAll (Colors::lightblue);
+
+        auto font = getFont (rowNumber);
+
+        AttributedString s;
+        s.setWordWrap (AttributedString::none);
+        s.setJustification (Justification::centredLeft);
+        s.append (getNameForRow (rowNumber), font.withPointHeight ((f32) height * 0.7f), Colors::black);
+        s.append ("   " + font.getTypefaceName(), FontOptions ((f32) height * 0.5f, Font::italic), Colors::grey);
+
+        s.draw (g, Rectangle<i32> (width, height).expanded (-4, 50).toFloat());
+    }
+
+    Txt getNameForRow (i32 rowNumber) override
+    {
+        return getFont (rowNumber).getTypefaceName();
+    }
+
+    z0 selectedRowsChanged (i32 /*lastRowselected*/) override
+    {
+        resetMetricsSliders();
+        refreshPreviewBoxFont();
+    }
+
+private:
+    Font getFont (i32 rowNumber) const
+    {
+        return isPositiveAndBelow (rowNumber, fonts.size()) ? fonts.getUnchecked (rowNumber) : FontOptions{};
+    }
+
+    Array<Font> fonts;
+    StringArray currentStyleList;
+
+    ListBox listBox;
+    TextEditor demoTextBox;
+
+    Label heightLabel  { {}, "Height:" },
+          kerningLabel { {}, "Kerning:" },
+          scaleLabel   { {}, "Scale:" },
+          styleLabel   { {}, "Style:" },
+          ascentLabel  { {}, "Ascent:" },
+          descentLabel { {}, "Descent:" },
+          horizontalJustificationLabel { {}, "Justification (horizontal):" },
+          verticalJustificationLabel   { {}, "Justification (vertical):" };
+
+    ToggleButton boldToggle      { "Bold" },
+                 italicToggle    { "Italic" },
+                 underlineToggle { "Underlined" };
+
+    TextButton resetButton { "Reset" };
+
+    Slider heightSlider, kerningSlider, scaleSlider, ascentSlider, descentSlider;
+    ComboBox styleBox, horizontalJustificationBox, verticalJustificationBox;
+
+    StretchableLayoutManager verticalLayout;
+    std::unique_ptr<StretchableLayoutResizerBar> verticalDividerBar;
+
+    StringArray horizontalJustificationStrings { "Left", "Centred", "Right" },
+                verticalJustificationStrings   { "Top",  "Centred", "Bottom" };
+
+    Array<i32>  horizontalJustificationFlags { Justification::left, Justification::horizontallyCentred, Justification::right },
+                verticalJustificationFlags   { Justification::top,  Justification::verticallyCentred, Justification::bottom};
+
+    //==============================================================================
+    z0 resetToDefaultParameters()
+    {
+        scaleSlider  .setValue (1.0);
+        heightSlider .setValue (20.0);
+        kerningSlider.setValue (0.0);
+
+        boldToggle     .setToggleState (false, sendNotificationSync);
+        italicToggle   .setToggleState (false, sendNotificationSync);
+        underlineToggle.setToggleState (false, sendNotificationSync);
+
+        styleBox.setSelectedItemIndex (0);
+        horizontalJustificationBox.setSelectedItemIndex (0);
+        verticalJustificationBox  .setSelectedItemIndex (0);
+
+        resetMetricsSliders();
+    }
+
+    z0 resetMetricsSliders()
+    {
+        auto font = getFont (listBox.getSelectedRow());
+        font.setPointHeight (1.0f);
+
+        ascentSlider .setValue (font.getAscentInPoints());
+        descentSlider.setValue (font.getDescentInPoints());
+    }
+
+    z0 setupJustificationOptions()
+    {
+        horizontalJustificationBox.addItemList (horizontalJustificationStrings, 1);
+        verticalJustificationBox  .addItemList (verticalJustificationStrings, 1);
+
+        auto updateJustification = [this]()
+        {
+            auto horizontalIndex = horizontalJustificationBox.getSelectedItemIndex();
+            auto verticalIndex   = verticalJustificationBox.getSelectedItemIndex();
+
+            auto horizontalJustification = horizontalJustificationFlags[horizontalIndex];
+            auto verticalJustification   = verticalJustificationFlags[verticalIndex];
+
+            demoTextBox.setJustification (horizontalJustification | verticalJustification);
+        };
+
+        horizontalJustificationBox.onChange = updateJustification;
+        verticalJustificationBox  .onChange = updateJustification;
+    }
+
+    z0 refreshPreviewBoxFont()
+    {
+        auto bold   = boldToggle  .getToggleState();
+        auto italic = italicToggle.getToggleState();
+        auto useStyle = ! (bold || italic);
+
+        auto font = getFont (listBox.getSelectedRow());
+
+        font = font.withPointHeight        ((f32) heightSlider .getValue())
+                   .withExtraKerningFactor ((f32) kerningSlider.getValue())
+                   .withHorizontalScale    ((f32) scaleSlider  .getValue());
+
+        if (bold)    font = font.boldened();
+        if (italic)  font = font.italicised();
+
+        updateStylesList (font);
+
+        styleBox.setEnabled (useStyle);
+
+        if (useStyle)
+            font = font.withTypefaceStyle (styleBox.getText());
+
+        font.setUnderline (underlineToggle.getToggleState());
+        font.setAscentOverride  ((f32) ascentSlider .getValue());
+        font.setDescentOverride ((f32) descentSlider.getValue());
+
+        demoTextBox.applyFontToAllText (font);
+    }
+
+    z0 updateStylesList (const Font& newFont)
+    {
+        auto newStyles = newFont.getAvailableStyles();
+
+        if (newStyles != currentStyleList)
+        {
+            currentStyleList = newStyles;
+
+            styleBox.clear();
+            styleBox.addItemList (newStyles, 1);
+            styleBox.setSelectedItemIndex (0);
+        }
+    }
+
+    DRX_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FontsDemo)
+};

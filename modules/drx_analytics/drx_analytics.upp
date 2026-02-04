@@ -1,0 +1,9 @@
+file
+	drx_analytics.h,
+	drx_analytics.cpp,
+	analytics/drx_Analytics.h,
+	analytics/drx_ButtonTracker.h,
+	destinations/drx_AnalyticsDestination.h,
+	destinations/drx_ThreadedAnalyticsDestination.h,
+	end readonly separator;
+

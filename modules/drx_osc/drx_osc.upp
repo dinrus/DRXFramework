@@ -1,0 +1,13 @@
+file
+	drx_osc.h,
+	drx_osc.cpp,
+	osc/drx_OSCAddress.h,
+	osc/drx_OSCArgument.h,
+	osc/drx_OSCBundle.h,
+	osc/drx_OSCMessage.h,
+	osc/drx_OSCReceiver.h,
+	osc/drx_OSCSender.h,
+	osc/drx_OSCTimeTag.h,
+	osc/drx_OSCTypes.h,
+	end readonly separator;
+

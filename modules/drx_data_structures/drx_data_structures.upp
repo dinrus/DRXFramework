@@ -1,0 +1,15 @@
+file
+	drx_data_structures.h,
+	drx_data_structures.mm,
+	drx_data_structures.cpp,
+	app_properties/drx_ApplicationProperties.h,
+	app_properties/drx_PropertiesFile.h,
+	undomanager/drx_UndoableAction.h,
+	undomanager/drx_UndoManager.h,
+	values/drx_CachedValue.h,
+	values/drx_Value.h,
+	values/drx_ValueTree.h,
+	values/drx_ValueTreePropertyWithDefault.h,
+	values/drx_ValueTreeSynchroniser.h,
+	end readonly separator;
+

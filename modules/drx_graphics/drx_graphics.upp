@@ -1,0 +1,21 @@
+file
+	drx_graphics.h,
+	"Геометрия" readonly separator,
+	geometry/drx_AffineTransform.h,
+	geometry/drx_BorderSize.h,
+	geometry/drx_EdgeTable.h,
+	geometry/drx_Line.h,
+	geometry/drx_Parallelogram.h,
+	geometry/drx_Path.h,
+	geometry/drx_PathIterator.h,
+	geometry/drx_PathStrokeType.h,
+	geometry/drx_Point.h,
+	geometry/drx_Rectangle.h,
+	geometry/drx_RectangleList.h,
+	code readonly separator,
+	drx_graphics.mm,
+	drx_graphics_Harfbuzz.cpp,
+	drx_graphics_Sheenbidi.c,
+	drx_graphics.cpp,
+	end readonly separator;
+

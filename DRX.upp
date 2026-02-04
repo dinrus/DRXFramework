@@ -1,0 +1,42 @@
+noblitz;
+
+uses
+	DRX/modules/drx_core,
+	drx/unwind,
+	DRX/modules/drx_gui_basics,
+	DRX/modules/drx_graphics,
+	DRX/modules/drx_events,
+	DRX/modules/drx_data_structures,
+	DRX/modules/drx_animation,
+	DRX/modules/drx_audio_basics,
+	DRX/modules/drx_audio_devices,
+	DRX/modules/drx_audio_formats,
+	DRX/modules/drx_cryptography,
+	DRX/modules/drx_audio_utils,
+	DRX/modules/drx_audio_processors,
+	DRX/modules/drx_opengl,
+	DRX/modules/drx_analytics,
+	DRX/modules/drx_box2d,
+	DRX/modules/drx_dsp,
+	DRX/modules/drx_javascript,
+	DRX/modules/drx_midi_ci,
+	DRX/modules/drx_osc,
+	DRX/modules/drx_product_unlocking,
+	DRX/modules/drx_video,
+	DRX/modules/drx_gui_extra,
+	DRX/modules/drx_audio_processors;
+
+library
+	"freetype fontconfig png expat";
+
+include
+	./modules;
+
+file
+	modules/GuiApp/Main.cpp,
+	modules/GuiApp/MainComponent.cpp,
+	modules/GuiApp/MainComponent.h;
+
+mainconfig
+	"" = "";
+

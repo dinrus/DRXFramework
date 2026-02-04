@@ -1,0 +1,19 @@
+uses
+	DRX;
+
+library
+	"GL drx_unwind";
+
+options
+	"-DDRX_DEMO_RUNNER=1 -DDRX_MODULE_AVAILABLE_drx_gui_extra=1";
+
+file
+	"код" readonly separator,
+	Source/Demos/DemoPIPs1.cpp,
+	Source/Demos/DemoPIPs2.cpp,
+	Source/Demos/DRXDemos.cpp,
+	Source/UI/DemoContentComponent.cpp,
+	Source/UI/MainComponent.cpp,
+	Source/Main.cpp,
+	"сщву" readonly separator;
+

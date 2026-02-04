@@ -1,0 +1,19 @@
+library
+	asound;
+
+file
+	drx_audio_devices.h,
+	drx_audio_devices.cpp,
+	drx_audio_devices.mm,
+	audio_io/drx_AudioDeviceManager.h,
+	audio_io/drx_AudioIODevice.h,
+	audio_io/drx_AudioIODeviceType.h,
+	audio_io/drx_SystemAudioVolume.h,
+	midi_io/drx_MidiDevices.h,
+	midi_io/drx_MidiMessageCollector.h,
+	native/drx_Audio_ios.h,
+	native/drx_HighPerformanceAudioHelpers_android.h,
+	sources/drx_AudioSourcePlayer.h,
+	sources/drx_AudioTransportSource.h,
+	end readonly separator;
+

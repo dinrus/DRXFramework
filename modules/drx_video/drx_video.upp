@@ -1,0 +1,15 @@
+file
+	drx_video.h,
+	drx_video.cpp,
+	drx_video.mm,
+	capture/drx_CameraDevice.h,
+	native/drx_CameraDevice_android.h,
+	native/drx_CameraDevice_ios.h,
+	native/drx_CameraDevice_mac.h,
+	native/drx_CameraDevice_windows.h,
+	native/drx_Video_android.h,
+	native/drx_Video_mac.h,
+	native/drx_Video_windows.h,
+	playback/drx_VideoComponent.h,
+	end readonly separator;
+

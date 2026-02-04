@@ -1,0 +1,127 @@
+/*
+  ==============================================================================
+
+   This file is part of the DRX framework.
+   Copyright (c) DinrusPro
+
+   DRX is an open source framework subject to commercial or open source
+   licensing.
+
+   By downloading, installing, or using the DRX framework, or combining the
+   DRX framework with any other source code, object code, content or any other
+   copyrightable work, you agree to the terms of the DRX End User Licence
+   Agreement, and all incorporated terms including the DRX Privacy Policy and
+   the DRX Website Terms of Service, as applicable, which will bind you. If you
+   do not agree to the terms of these agreements, we will not license the DRX
+   framework to you, and you must discontinue the installation or download
+   process and cease use of the DRX framework.
+
+   DRX End User Licence Agreement: https://drx.com/legal/drx-8-licence/
+   DRX Privacy Policy: https://drx.com/drx-privacy-policy
+   DRX Website Terms of Service: https://drx.com/drx-website-terms-of-service/
+
+   Or:
+
+   You may also use this code under the terms of the AGPLv3:
+   https://www.gnu.org/licenses/agpl-3.0.en.html
+
+   THE DRX FRAMEWORK IS PROVIDED "AS IS" WITHOUT ANY WARRANTY, AND ALL
+   WARRANTIES, WHETHER EXPRESSED OR IMPLIED, INCLUDING WARRANTY OF
+   MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, ARE DISCLAIMED.
+
+  ==============================================================================
+*/
+
+namespace drx::dsp
+{
+
+enum class PannerRule
+{
+    linear,          // regular 6 dB or linear panning rule, allows the panned sound to be
+                     // perceived as having a constant level when summed to mono
+    balanced,        // both left and right are 1 when pan value is 0, with left decreasing
+                     // to 0 above this value and right decreasing to 0 below it
+    sin3dB,          // alternate version of the regular 3 dB panning rule with a sine curve
+    sin4p5dB,        // alternate version of the regular 4.5 dB panning rule with a sine curve
+    sin6dB,          // alternate version of the regular 6 dB panning rule with a sine curve
+    squareRoot3dB,   // regular 3 dB or constant power panning rule, allows the panned sound
+                     // to be perceived as having a constant level regardless of the pan position
+    squareRoot4p5dB  // regular 4.5 dB panning rule, a compromise option between 3 dB and 6 dB panning rules
+};
+
+/**
+    A processor to perform panning operations on stereo buffers.
+
+    @tags{DSP}
+*/
+template <typename SampleType>
+class DRX_API Panner
+{
+public:
+    //==============================================================================
+    using Rule = PannerRule;
+
+    //==============================================================================
+    /** Constructor. */
+    Panner();
+
+    //==============================================================================
+    /** Sets the panning rule. */
+    z0 setRule (Rule newRule);
+
+    /** Sets the current panning value, between -1 (full left) and 1 (full right). */
+    z0 setPan (SampleType newPan);
+
+    //==============================================================================
+    /** Initialises the processor. */
+    z0 prepare (const ProcessSpec& spec);
+
+    /** Resets the internal state variables of the processor. */
+    z0 reset();
+
+    //==============================================================================
+    /** Processes the input and output samples supplied in the processing context. */
+    template <typename ProcessContext>
+    z0 process (const ProcessContext& context) noexcept
+    {
+        const auto& inputBlock = context.getInputBlock();
+        auto& outputBlock      = context.getOutputBlock();
+
+        const auto numInputChannels  = inputBlock.getNumChannels();
+        const auto numOutputChannels = outputBlock.getNumChannels();
+        [[maybe_unused]] const auto numSamples        = outputBlock.getNumSamples();
+
+        jassert (inputBlock.getNumSamples() == numSamples);
+
+        if (numOutputChannels != 2 || numInputChannels == 0 || numInputChannels > 2)
+            return;
+
+        if (numInputChannels == 2)
+        {
+            outputBlock.copyFrom (inputBlock);
+        }
+        else
+        {
+            outputBlock.getSingleChannelBlock (0).copyFrom (inputBlock);
+            outputBlock.getSingleChannelBlock (1).copyFrom (inputBlock);
+        }
+
+        if (context.isBypassed)
+            return;
+
+        outputBlock.getSingleChannelBlock (0).multiplyBy (leftVolume);
+        outputBlock.getSingleChannelBlock (1).multiplyBy (rightVolume);
+    }
+
+private:
+    //==============================================================================
+    z0 update();
+
+    //==============================================================================
+    Rule currentRule = Rule::balanced;
+    SampleType pan = 0.0;
+    SmoothedValue<SampleType> leftVolume, rightVolume;
+    f64 sampleRate = 44100.0;
+};
+
+} // namespace drx::dsp

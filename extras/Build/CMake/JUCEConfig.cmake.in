@@ -1,0 +1,96 @@
+# ==============================================================================
+#
+#  This file is part of the DRX library.
+#  Copyright (c) - DinrusPro
+#
+#  DRX is an open source library subject to commercial or open-source
+#  licensing.
+#
+#  The code included in this file is provided under the terms of the ISC license
+#  http://www.isc.org/downloads/software-support-policy/isc-license. Permission
+#  To use, copy, modify, and/or distribute this software for any purpose with or
+#  without fee is hereby granted provided that the above copyright notice and
+#  this permission notice appear in all copies.
+#
+#  DRX IS PROVIDED "AS IS" WITHOUT ANY WARRANTY, AND ALL WARRANTIES, WHETHER
+#  EXPRESSED OR IMPLIED, INCLUDING MERCHANTABILITY AND FITNESS FOR PURPOSE, ARE
+#  DISCLAIMED.
+#
+# ==============================================================================
+
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/LV2_HELPER.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/VST3_HELPER.cmake")
+
+if(NOT TARGET juce::juceaide)
+    add_executable(juce::juceaide IMPORTED)
+    set_target_properties(juce::juceaide PROPERTIES
+        IMPORTED_LOCATION "@PACKAGE_JUCEAIDE_PATH@")
+endif()
+
+check_required_components("@PROJECT_NAME@")
+
+set(JUCE_MODULES_DIR "@PACKAGE_JUCE_MODULE_PATH@" CACHE INTERNAL
+    "The path to DRX modules")
+
+include("@PACKAGE_UTILS_INSTALL_DIR@/JUCEModuleSupport.cmake")
+include("@PACKAGE_UTILS_INSTALL_DIR@/JUCEUtils.cmake")
+
+set(_drx_modules
+    drx_analytics
+    drx_animation
+    drx_audio_basics
+    drx_audio_devices
+    drx_audio_formats
+    drx_audio_plugin_client
+    drx_audio_processors
+    drx_audio_utils
+    drx_box2d
+    drx_core
+    drx_cryptography
+    drx_data_structures
+    drx_dsp
+    drx_events
+    drx_graphics
+    drx_gui_basics
+    drx_gui_extra
+    drx_javascript
+    drx_midi_ci
+    drx_opengl
+    drx_osc
+    drx_product_unlocking
+    drx_video)
+
+set(_targets_defined)
+set(_targets_expected)
+
+foreach(_drx_module IN LISTS _drx_modules)
+    list(APPEND _targets_expected ${_drx_module} juce::${_drx_modules})
+    if(TARGET ${_drx_module})
+        list(APPEND _targets_defined ${_drx_module})
+    endif()
+
+    if(TARGET juce::${_drx_module})
+        list(APPEND _targets_defined juce::${_drx_module})
+    endif()
+endforeach()
+
+if("${_targets_defined}" STREQUAL "${_targets_expected}")
+    unset(_targets_defined)
+    unset(_targets_expected)
+    return()
+endif()
+
+if(NOT "${_targets_defined}" STREQUAL "")
+    message(FATAL_ERROR "Some targets in this export set were already defined.")
+endif()
+
+unset(_targets_defined)
+unset(_targets_expected)
+
+foreach(_drx_module IN LISTS _drx_modules)
+    drx_add_module("@PACKAGE_JUCE_MODULE_PATH@/${_drx_module}" ALIAS_NAMESPACE juce)
+endforeach()
+
+unset(_drx_modules)

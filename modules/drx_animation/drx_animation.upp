@@ -1,0 +1,13 @@
+file
+	drx_animation.h,
+	drx_animation.cpp,
+	animation/drx_Animator.h,
+	animation/drx_AnimatorSetBuilder.h,
+	animation/drx_AnimatorUpdater.h,
+	animation/drx_Easings.h,
+	animation/drx_StaticAnimationLimits.h,
+	animation/drx_ValueAnimatorBuilder.h,
+	animation/drx_VBlankAnimatorUpdater.h,
+	detail/drx_ArrayAndTupleOps.h,
+	end readonly separator;
+

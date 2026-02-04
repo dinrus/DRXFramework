@@ -1,0 +1,127 @@
+/*
+  ==============================================================================
+
+   This file is part of the DRX framework.
+   Copyright (c) DinrusPro
+
+   DRX is an open source framework subject to commercial or open source
+   licensing.
+
+   By downloading, installing, or using the DRX framework, or combining the
+   DRX framework with any other source code, object code, content or any other
+   copyrightable work, you agree to the terms of the DRX End User Licence
+   Agreement, and all incorporated terms including the DRX Privacy Policy and
+   the DRX Website Terms of Service, as applicable, which will bind you. If you
+   do not agree to the terms of these agreements, we will not license the DRX
+   framework to you, and you must discontinue the installation or download
+   process and cease use of the DRX framework.
+
+   DRX End User Licence Agreement: https://drx.com/legal/drx-8-licence/
+   DRX Privacy Policy: https://drx.com/drx-privacy-policy
+   DRX Website Terms of Service: https://drx.com/drx-website-terms-of-service/
+
+   Or:
+
+   You may also use this code under the terms of the AGPLv3:
+   https://www.gnu.org/licenses/agpl-3.0.en.html
+
+   THE DRX FRAMEWORK IS PROVIDED "AS IS" WITHOUT ANY WARRANTY, AND ALL
+   WARRANTIES, WHETHER EXPRESSED OR IMPLIED, INCLUDING WARRANTY OF
+   MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, ARE DISCLAIMED.
+
+  ==============================================================================
+*/
+
+namespace drx::detail
+{
+
+class ToolbarItemDragAndDropOverlayComponent    : public Component
+{
+public:
+    ToolbarItemDragAndDropOverlayComponent()
+        : isDragging (false)
+    {
+        setAlwaysOnTop (true);
+        setRepaintsOnMouseActivity (true);
+        setMouseCursor (MouseCursor::DraggingHandCursor);
+    }
+
+    z0 paint (Graphics& g) override
+    {
+        if (ToolbarItemComponent* const tc = getToolbarItemComponent())
+        {
+            if (isMouseOverOrDragging()
+                  && tc->getEditingMode() == ToolbarItemComponent::editableOnToolbar)
+            {
+                g.setColor (findColor (Toolbar::editingModeOutlineColorId, true));
+                g.drawRect (getLocalBounds(), jmin (2, (getWidth() - 1) / 2,
+                                                       (getHeight() - 1) / 2));
+            }
+        }
+    }
+
+    z0 mouseDown (const MouseEvent& e) override
+    {
+        isDragging = false;
+
+        if (ToolbarItemComponent* const tc = getToolbarItemComponent())
+        {
+            tc->dragOffsetX = e.x;
+            tc->dragOffsetY = e.y;
+        }
+    }
+
+    z0 mouseDrag (const MouseEvent& e) override
+    {
+        if (e.mouseWasDraggedSinceMouseDown() && ! isDragging)
+        {
+            isDragging = true;
+
+            if (DragAndDropContainer* const dnd = DragAndDropContainer::findParentDragContainerFor (this))
+            {
+                dnd->startDragging (Toolbar::toolbarDragDescriptor, getParentComponent(), ScaledImage(), true, nullptr, &e.source);
+
+                if (ToolbarItemComponent* const tc = getToolbarItemComponent())
+                {
+                    tc->isBeingDragged = true;
+
+                    if (tc->getEditingMode() == ToolbarItemComponent::editableOnToolbar)
+                        tc->setVisible (false);
+                }
+            }
+        }
+    }
+
+    z0 mouseUp (const MouseEvent&) override
+    {
+        isDragging = false;
+
+        if (ToolbarItemComponent* const tc = getToolbarItemComponent())
+        {
+            tc->isBeingDragged = false;
+
+            if (Toolbar* const tb = tc->getToolbar())
+                tb->updateAllItemPositions (true);
+            else if (tc->getEditingMode() == ToolbarItemComponent::editableOnToolbar)
+                delete tc;
+        }
+    }
+
+    z0 parentSizeChanged() override
+    {
+        setBounds (0, 0, getParentWidth(), getParentHeight());
+    }
+
+private:
+    //==============================================================================
+    b8 isDragging;
+
+    ToolbarItemComponent* getToolbarItemComponent() const noexcept
+    {
+        return dynamic_cast<ToolbarItemComponent*> (getParentComponent());
+    }
+
+    DRX_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ToolbarItemDragAndDropOverlayComponent)
+};
+
+} // namespace drx::detail

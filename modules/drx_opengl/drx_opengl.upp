@@ -1,0 +1,33 @@
+library
+	GL;
+
+file
+	drx_opengl.h,
+	drx_opengl.cpp,
+	drx_opengl.mm,
+	geometry/drx_Draggable3DOrientation.h,
+	geometry/drx_Matrix3D.h,
+	geometry/drx_Quaternion.h,
+	geometry/drx_Vector3D.h,
+	native/drx_OpenGL_android.h,
+	native/drx_OpenGL_ios.h,
+	native/drx_OpenGL_linux.h,
+	native/drx_OpenGL_mac.h,
+	native/drx_OpenGL_windows.h,
+	native/drx_OpenGLExtensions.h,
+	opengl/drx_gl.h,
+	opengl/drx_gles2.h,
+	opengl/drx_khrplatform.h,
+	opengl/drx_OpenGLContext.h,
+	opengl/drx_OpenGLFrameBuffer.h,
+	opengl/drx_OpenGLGraphicsContext.h,
+	opengl/drx_OpenGLHelpers.h,
+	opengl/drx_OpenGLImage.h,
+	opengl/drx_OpenGLPixelFormat.h,
+	opengl/drx_OpenGLRenderer.h,
+	opengl/drx_OpenGLShaderProgram.h,
+	opengl/drx_OpenGLTexture.h,
+	opengl/drx_wgl.h,
+	utils/drx_OpenGLAppComponent.h,
+	end readonly separator;
+

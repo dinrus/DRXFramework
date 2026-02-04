@@ -1,0 +1,52 @@
+uses
+	drx/Core;
+
+library
+	"fontconfig curl freetype drx_unwind";
+
+file
+	import readonly separator,
+	DrxLibraryCode/BinaryData.cpp,
+	DrxLibraryCode/include_drx_build_tools.cpp,
+	DrxLibraryCode/include_drx_core.cpp,
+	DrxLibraryCode/include_drx_core_CompilationTime.cpp,
+	DrxLibraryCode/include_drx_cryptography.cpp,
+	DrxLibraryCode/include_drx_data_structures.cpp,
+	DrxLibraryCode/include_drx_events.cpp,
+	DrxLibraryCode/include_drx_graphics.cpp,
+	DrxLibraryCode/include_drx_graphics_Harfbuzz.cpp,
+	DrxLibraryCode/include_drx_graphics_Sheenbidi.c,
+	DrxLibraryCode/include_drx_gui_basics.cpp,
+	DrxLibraryCode/include_drx_gui_extra.cpp,
+	code readonly separator,
+	Source/Utility/Helpers/jucer_CodeHelpers.cpp,
+	Source/Utility/Helpers/jucer_FileHelpers.cpp,
+	Source/Utility/Helpers/jucer_MiscUtilities.cpp,
+	Source/Utility/Helpers/jucer_NewFileWizard.cpp,
+	Source/Utility/Helpers/jucer_VersionInfo.cpp,
+	Source/Utility/PIPs/jucer_PIPGenerator.cpp,
+	Source/Utility/UI/jucer_Icons.cpp,
+	Source/Utility/UI/jucer_JucerTreeViewBase.cpp,
+	Source/Utility/UI/jucer_ProjucerLookAndFeel.cpp,
+	Source/Utility/UI/jucer_SlidingPanelComponent.cpp,
+	Source/Settings/jucer_AppearanceSettings.cpp,
+	Source/Settings/jucer_StoredSettings.cpp,
+	Source/ProjectSaving/jucer_ProjectExporter.cpp,
+	Source/ProjectSaving/jucer_ProjectSaver.cpp,
+	Source/ProjectSaving/jucer_ResourceFile.cpp,
+	Source/Project/Modules/jucer_Modules.cpp,
+	Source/Project/UI/jucer_HeaderComponent.cpp,
+	Source/Project/jucer_Project.cpp,
+	Source/CodeEditor/jucer_DocumentEditorComponent.cpp,
+	Source/CodeEditor/jucer_OpenDocumentManager.cpp,
+	Source/CodeEditor/jucer_SourceCodeEditor.cpp,
+	Source/Application/StartPage/jucer_NewProjectWizard.cpp,
+	Source/Application/StartPage/jucer_StartPageComponent.cpp,
+	Source/Application/jucer_AutoUpdater.cpp,
+	Source/Application/jucer_CommandLine.cpp,
+	Source/Application/jucer_Main.cpp,
+	Source/Application/jucer_MainWindow.cpp;
+
+mainconfig
+	"" = "";
+

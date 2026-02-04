@@ -1,0 +1,10 @@
+file
+	drx_javascript.h,
+	javascript/drx_JavascriptEngine.h,
+	javascript/drx_JSCursor.h,
+	javascript/drx_JSObject.h,
+	drx_javascript.cpp,
+	choc/javascript/choc_javascript.h,
+	choc/javascript/choc_javascript_QuickJS.h,
+	end readonly separator;
+
